@@ -3,8 +3,12 @@
 _n() {
 
 IFS=$'\n'
-local cur
-	cur=~/notes/${COMP_WORDS[COMP_CWORD]}
+local cur notepath
+
+	# This variable contains the path to your notes
+	notepath=~/notes/
+
+	cur=$notepath${COMP_WORDS[COMP_CWORD]}
 	COMPREPLY=( $( compgen -f $cur | cut -d / -f5 | sed 's/ /\ /g' | \
 	sed 's/.txt$//' ) ) && compopt -o nospace
 }
