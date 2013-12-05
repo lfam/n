@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# todo: tab completion that returns to prompt with previous input
+
+notepath=~/notes/
+
+# running with no argument returns a list of of all notes
+if [ -z "$1" ]
+then
+	ls -c $notepath | sed s'/.txt$//'
+
+# if option -w is set, print notes directory
+elif [ "$1" = "-w" ]
+then
+	echo $notepath
+
+# if option -n is set, open $1 in nano
+elif [ "$2" = "-n" ]
+then
+	touch $notepath"$1".txt
+	nano $notepath"$1".txt
+
+# running with an argument returns a list of notes whose filenames contain
+# that argument
+else
+	# grep inside notes for search string. Return filename and matching 
+	# content plus 15 characters on either side. Then reverse order of 
+	# lines. Then trim file extensions and make output easier to read.
+	grep -E -iRso ".{0,15}$1.{0,15}" ~/notes/ | cut -d / -f5 | \
+		sed '1!G;h;$!d' | \
+		sed 's/.txt:/\ :\ /'
+	# find matching filenames.  Then reverse order of results and trim 
+	# file extensions.
+	find ~/notes -iname "*$1*" | cut -d / -f5 | \
+		sed '1!G;h;$!d' | \
+                sed 's/.txt//'
+
+	# This was replaced by the above grep and find blocks.
+	#ls -c ~/notes | grep -i "$*"
+fi

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+_notes() {
+	local cur
+	cur=~/notes/${COMP_WORDS[COMP_CWORD]}
+	
+	COMPREPLY=( "$( compgen -f $cur | cut -d / -f5 | sed 's/ /\\ /g' | \
+	sed 's/.txt$//' )" ) && compopt -o nospace
+	return
+} # _notes()
+complete -F _notes notes
