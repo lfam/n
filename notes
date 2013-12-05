@@ -23,14 +23,17 @@ then
 # running with an argument returns a list of notes whose filenames contain
 # that argument
 else
-	# This takes $1 argument, and first matches filenames, then within\ 
-	# files. Strips paths and file extensions from results, then\ 
-	# outputs them in reverse order.
-
-	sed '1!G;h;$!d' <  ( find ~/notes -iname "*$1*" | cut -d / -f5 | \
-	sed 's/.txt//' ; \ 
-	grep -E -iRso ".{0,15}$1.{0,15}" ~/notes/ | cut -d / -f5 | \ 
-	sed 's/.txt:/\ :\ /' )
+	# grep inside notes for search string. Return filename and matching 
+	# content plus 15 characters on either side. Then reverse order of 
+	# lines. Then trim file extensions and make output easier to read.
+	grep -E -iRso ".{0,15}$1.{0,15}" ~/notes/ | cut -d / -f5 | \
+		sed '1!G;h;$!d' | \
+		sed 's/.txt:/\ :\ /'
+	# find matching filenames.  Then reverse order of results and trim 
+	# file extensions.
+	find ~/notes -iname "*$1*" | cut -d / -f5 | \
+		sed '1!G;h;$!d' | \
+                sed 's/.txt//'
 
 	# This was replaced by the above grep and find blocks.
 	#ls -c ~/notes | grep -i "$*"
