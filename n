@@ -6,7 +6,7 @@ notepath=~/notes/
 # running with no argument returns a list of of all notes
 if [ -z "$1" ]
 then
-	ls -c $notepath | sed s'/.txt$//'
+	ls -t $notepath | sed s'/.txt$//'
 
 # if option -w is set, print notes directory
 elif [ "$1" = "-w" ]
