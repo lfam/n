@@ -1,7 +1,7 @@
-#!/bin/sh
+#! /bin/sh
 
 # this variable contains the path to your notes
-notepath=~/notes/
+notepath=$HOME/notes/
 
 # running with no argument returns a list of of all notes
 if [ -z "$1" ]
@@ -22,9 +22,7 @@ then
 # running with an argument returns a list of notes whose filenames contain
 # that argument
 else
-	{ find ~/notes -iname "*$1*" | cut -d / -f5 | sed 's/.txt//' ; 
-	grep -E -iRso ".{0,15}$1.{0,15}" ~/notes/ | cut -d / -f5 | \
+	{ find $notepath -iname "*$1*" | cut -d / -f5 | sed 's/.txt//' ; 
+	grep -E -iRso ".{0,15}$1.{0,15}" $notepath | cut -d / -f5 | \
 	sed 's/.txt:/\ :\ /' ; } | sed '1!G;h;$!d'
-	# This was replaced by the above grep and find blocks.
-	#ls -c ~/notes | grep -i "$*"
 fi
