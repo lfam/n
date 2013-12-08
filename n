@@ -16,7 +16,6 @@ then
 # if option -n is set, open $1 in nano
 elif [ "$2" = "-n" ]
 then
-	touch $notepath"$1".txt
 	nano $notepath"$1".txt
 
 # running with an argument returns a list of notes whose filenames contain
