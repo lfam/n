@@ -21,7 +21,7 @@ then
 # running with an argument returns a list of notes whose filenames contain
 # that argument
 else
-	{ find -L $notepath -iname "*$1*" | cut -d / -f5 | sed 's/.txt//' ; 
-	grep -E -iRso ".{0,15}$1.{0,15}" $notepath | cut -d / -f5 | \
+	{ find -L $notepath -iname "*$1*" | sed 's!.*/!!' | sed 's/.txt/\ /' ; 
+	grep -E -iRso ".{0,15}$1.{0,15}" $notepath | sed 's!.*/!!'  | \
 	sed 's/.txt:/\ :\ /' ; } | sed '1!G;h;$!d'
 fi
