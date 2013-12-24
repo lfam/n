@@ -43,12 +43,7 @@ elif [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ]
 then
 	printf "$help"
 
-# if option -w is set, print notes directory
-#elif [ "$1" = "-w" ]
-#then
-#	echo $notepath
-
-# option -w? print path
+# if option -w is set, print path to argument
 elif [ "$1" = "-w" ] || [ "$2" = "-w" ] 
 then
 	if [ -z "$2" ]
