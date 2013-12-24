@@ -44,9 +44,23 @@ then
 	printf "$help"
 
 # if option -w is set, print notes directory
-elif [ "$1" = "-w" ]
+#elif [ "$1" = "-w" ]
+#then
+#	echo $notepath
+
+# option -w? print path
+elif [ "$1" = "-w" ] || [ "$2" = "-w" ] 
 then
-	echo $notepath
+	if [ -z "$2" ]
+	then
+		printf "$notepath\n"
+	elif [ "$1" = "-w" ]
+	then
+		[ -e "$notepath$2".txt ] && printf "$notepath$2.txt\n" || printf "No "$2" in "$notepath"\n"
+	elif [ "$2" = "-w" ]
+	then
+		[ -e "$notepath$1".txt ] && printf "$notepath$1.txt\n" || printf "No "$1" in "$notepath"\n"
+	fi
 
 # if option -n is set, open $1 in nano
 elif [ "$2" = "-n" ]
