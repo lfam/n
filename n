@@ -7,15 +7,15 @@ npath=$(which n)
 
 # these variables provide usage and documentation for n
 hint="Try 'n --help' for more information"
-help="n, for easily working with a set of text files\n
+help="\nn, for easily working with a set of text files\n
 Usage:
 	n				# print list of all notes
 	n -w <file [optional]>		# print path to notes or specific note
 	n <file [optional]> -w		# same as previous
 	n <search string>		# search within notes for string
-	n <search string [optional]> -n	# open note in nano
-	n -n <search string [optional]>	# same as previous
-
+	n <note title> -n		# open note in nano text editor
+	n -n <note title>		# same as previous
+	n -h OR -help OR --help		# print this help page
 You can change your notes directory by editing "'$notepath'" in $npath
 
 "
