@@ -2,41 +2,28 @@
 
 # this variable contains the path to your notes
 notepath=$HOME/notes/
+# this variable contains the path to the active copy of n, for use in $help
+npath=$(which n)
 
 # these variables provide usage and documentation for n
 hint="Try 'n --help' for more information"
 help="n, for easily working with a set of text files\n
 Usage:
-	n
-	n -w <file [optional]>
-	n <file [optional]> -w
-	n <search string>
-	n <search string [optional]> -n
-	n -n <search string [optional]>
+	n				# print list of all notes
+	n -w <file [optional]>		# print path to notes or specific note
+	n <file [optional]> -w		# same as previous
+	n <search string>		# search within notes for string
+	n <search string [optional]> -n	# open note in nano
+	n -n <search string [optional]>	# same as previous
 
-Modes:
-	These options can go before or after the filename argument
-	-n Open optionally named note in $EDITOR. Create it if it doesn't exist.
-	-w Print path to note
+You can change your notes directory by editing "'$notepath'" in $npath
 
-n[ENTER]
-List all notes
-
-n foo[ENTER]
-Show all notes containing foo*
-
-n foo -n[ENTER]
-Open foo in your shell's default text editor. If foo does not exist, it is created.
-
-n -w [optional search string][ENTER]
-Show path to search string. If search string is empty, print path to note directory.
 "
-
 # running with no argument returns a list of of all notes
 if [ -z "$1" ]
 then
 	ls -t $notepath | sed s'/.txt$//'
-	printf "\n$hint"
+	printf "\n$hint\n"
 
 # if option -h, -help, or --help is set, print help file
 elif [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ]
