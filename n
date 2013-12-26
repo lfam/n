@@ -35,7 +35,8 @@ elif [ "$1" = "-w" ] || [ "$2" = "-w" ]
 then
 	if [ -z "$2" ]
 	then
-		printf "$notepath\n"
+		[ -d "$notepath" ] && printf "$notepath\n"\
+|| printf "Your notes are supposed to be in $notepath but that directory does not exist. Try creating it or try n --help for more information.\n"
 	elif [ "$1" = "-w" ]
 	then
 		[ -e "$notepath$2".txt ] && printf "$notepath$2.txt\n" || printf "No "$2" in "$notepath"\n"
