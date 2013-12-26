@@ -49,7 +49,8 @@ then
 # if option -n is set, open $1 in nano
 elif [ "$2" = "-n" ]
 then
-	nano $notepath"$1".txt
+	touch $notepath"$1".txt && nano $notepath"$1".txt ||\
+	printf "You're trying to edit a note in /home/leo/netes/ but that directory doesn't exist. Try creating it or try n --help for more information.\n"
 
 # running with an argument returns a list of notes whose filenames contain
 # that argument
