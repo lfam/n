@@ -52,10 +52,11 @@ then
 	touch $notepath"$1".txt && nano $notepath"$1".txt ||\
 	printf "You're trying to edit a note in $notepath but that directory doesn't exist. Try creating it or try n --help for more information.\n"
 
-# running with an argument returns a list of notes whose filenames contain
-# that argument
+# running with an argument returns a list of notes whose filenames and contents
+# contain that argument
+
 else
-	{ find -L $notepath -iname "*$1*" | sed 's!.*/!!' | sed 's/.txt/\ /' ; 
-	grep -E -iRso ".{0,15}$1.{0,15}" $notepath | sed 's!.*/!!'  | \
+	{ find -L $notepath -iname "*$1*" | sed "s!$notepath!!" | sed 's/.txt/\ /' ; 
+	grep -E -iRso ".{0,15}$1.{0,15}" $notepath | sed "s!$notepath!!" | \
 	sed 's/.txt:/\ :\ /' ; } | sed '1!G;h;$!d'
 fi
