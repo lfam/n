@@ -1,0 +1,12 @@
+#compdef n
+
+# zsh shell completion for n
+
+# put this file somewhere in $fpath, which is the zsh shell function path
+# for example put it in ~/.zsh/completion and add that directory to $fpath
+# do it by putting the following line your ~/.zshrc
+# fpath=(~/.zsh/completion $fpath)
+
+local notepath
+notepath=$HOME/notes
+_files -W notepath
