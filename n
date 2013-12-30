@@ -2,14 +2,12 @@
 
 # this variable contains the path to your notes
 notepath=$HOME/notes/
-# this variable contains the path to the active copy of n, for use in $help
-npath=$(which n)
 
 # these variables provide usage and documentation for n
 hint="Try 'n --help' for more information"
 help="n, for carefree note taking and reading
 
-You can change your notes directory by editing "'$notepath'" in $npath
+You can change your notes directory by editing "'$notepath'" in $(which n)
 
 Usage:	n				# print list of all notes
 	n <optional note> -w		# print path to notes or specific note
