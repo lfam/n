@@ -3,13 +3,15 @@
 _n() {
 
 IFS=$'\n'
-local cur notepath
+local cur notepath suffix
 
 	# This variable contains the path to your notes
 	notepath=~/notes/
+	# This variable contains an optional suffix to hide from results
+	suffix=".txt"
 
 	cur=$notepath${COMP_WORDS[COMP_CWORD]}
 	COMPREPLY=( $( compgen -f $cur | cut -d / -f5 | sed 's/ /\ /g' | \
-	sed 's/.txt$//' ) ) && compopt -o nospace
+	sed "s/$suffix$//" ) ) && compopt -o nospace
 }
 complete -o filenames -F _n n

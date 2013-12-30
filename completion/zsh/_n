@@ -7,6 +7,6 @@
 # do it by putting the following line your ~/.zshrc
 # fpath=(~/.zsh/completion $fpath)
 
-local notepath
+local notepath suffix
 notepath=$HOME/notes
-_files -W notepath
+_files -W ${notepath} -g "*$suffix(:r)"
