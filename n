@@ -3,7 +3,10 @@
 # this variable contains the path to your notes
 notepath=$HOME/notes/
 
-# these variables provide usage and documentation for n
+# this variable contains an optional filename suffix to hide
+suffix=".txt"
+
+# these variables provide usage info and documentation for n
 hint="Try 'n --help' for more information"
 help="n, for carefree note taking and reading
 
@@ -21,7 +24,7 @@ Report any bugs to <lfamular@gmail.com>
 # running with no argument returns a list of of all notes
 if [ -z "$1" ]
 then
-	ls -t $notepath | sed s'/.txt$//'
+	ls -t $notepath | sed "s/$suffix$//"
 	printf "\n$hint\n"
 
 # if option -h, -help, or --help is set, print help file
@@ -47,14 +50,14 @@ then
 # if option -n is set, open $1 in nano
 elif [ "$2" = "-n" ]
 then
-	touch $notepath"$1".txt && nano $notepath"$1".txt ||\
+	touch $notepath"$1$suffix" && nano $notepath"$1$suffix" ||\
 	printf "You're trying to edit a note in $notepath but that directory doesn't exist. Try creating it or try n --help for more information.\n"
 
 # running with an argument returns a list of notes whose filenames and contents
 # contain that argument
 
 else
-	{ find -L $notepath -iname "*$1*" | sed "s!$notepath!!" | sed 's/.txt/\ /' ; 
+	{ find -L $notepath -iname "*$1*" | sed "s!$notepath!!" | sed "s/$suffix$/\ /" ; 
 	grep -E -iRso ".{0,15}$1.{0,15}" $notepath | sed "s!$notepath!!" | \
-	sed 's/.txt:/\ :\ /' ; } | sed '1!G;h;$!d'
+	sed "s/$suffix:/\ :\ /" ; } | sed '1!G;h;$!d'
 fi
