@@ -24,7 +24,7 @@ Report any bugs to <lfamular@gmail.com>
 # running with no argument returns a list of of all notes
 if [ -z "$1" ]
 then
-	ls -t $notepath | sed "s/$suffix$//"
+	ls -t $notepath | sed "s/$suffix$//" | sed '1!G;h;$!d'
 	printf "\n$hint\n"
 
 # if option -h, -help, or --help is set, print help file
