@@ -3,9 +3,6 @@
 # this variable contains the path to your notes
 notepath=$HOME/notes/
 
-# this variable contains an optional filename suffix to hide
-suffix=".txt"
-
 # these variables provide usage info and documentation for n
 hint="Try 'n --help' for more information"
 help="n, for carefree note taking and reading
@@ -24,7 +21,7 @@ Report any bugs to <lfamular@gmail.com>
 # running with no argument returns a list of of all notes
 if [ -z "$1" ]
 then
-	ls -t $notepath | sed "s/$suffix$//" | sed '1!G;h;$!d'
+	ls -t $notepath | sed '1!G;h;$!d'
 	printf "\n$hint\n"
 
 # if option -h, -help, or --help is set, print help file
@@ -41,23 +38,23 @@ then
 || printf "Your notes are supposed to be in $notepath but that directory does not exist. Try creating it or try n --help for more information.\n"
 	elif [ "$1" = "-w" ]
 	then
-		[ -e "$notepath$2".txt ] && printf "$notepath$2.txt\n" || printf "No "$2" in "$notepath"\n"
+		[ -e "$notepath$2" ] && printf "$notepath$2\n" || printf "No "$2" in "$notepath"\n"
 	elif [ "$2" = "-w" ]
 	then
-		[ -e "$notepath$1".txt ] && printf "$notepath$1.txt\n" || printf "No "$1" in "$notepath"\n"
+		[ -e "$notepath$1" ] && printf "$notepath$1\n" || printf "No "$1" in "$notepath"\n"
 	fi
 
 # if option -n is set, open $1 in nano
 elif [ "$2" = "-n" ]
 then
-	touch $notepath"$1$suffix" && nano $notepath"$1$suffix" ||\
+	touch $notepath"$1" && nano $notepath"$1" ||\
 	printf "You're trying to edit a note in $notepath but that directory doesn't exist. Try creating it or try n --help for more information.\n"
 
 # running with an argument returns a list of notes whose filenames and contents
 # contain that argument
 
 else
-	{ find -L $notepath -iname "*$1*" | sed "s!$notepath!!" | sed "s/$suffix$/\ /" ; 
-	grep -E -iRso ".{0,15}$1.{0,15}" $notepath | sed "s!$notepath!!" | \
-	sed "s/$suffix:/\ :\ /" ; } | sed '1!G;h;$!d'
+	{ find -L $notepath -iname "*$1*" | sed "s!$notepath!!" ;
+	grep -E -iRso ".{0,30}$1.{0,30}" $notepath | sed "s!$notepath!!" | \
+	sed "s/:/\ :\ /" ; } | sed '1!G;h;$!d'
 fi
