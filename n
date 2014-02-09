@@ -11,6 +11,7 @@ hint="Try 'n --help' for more information"
 help="n, for carefree note taking and reading
 
 You can change your notes directory by editing "'$notepath'" in $(which n)
+You can choose a file suffix to hide by editing "'$suffix'" in $(which n)
 
 Usage:	n				# print list of all notes
 	n <optional note> -w		# print path to notes or specific note
