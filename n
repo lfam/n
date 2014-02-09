@@ -39,7 +39,7 @@ then
 	if [ -z "$2" ]
 	then
 		[ -d "$notepath" ] && printf "$notepath\n"\
-|| printf "Your notes are supposed to be in $notepath but that directory does not exist. Try creating it or try n --help for more information.\n"
+		|| printf "Your notes are supposed to be in $notepath but that directory does not exist. Try creating it or try n --help for more information.\n"
 	elif [ "$1" = "-w" ]
 	then
 		[ -e "$notepath$2$suffix" ] && printf "$notepath$2$suffix\n" || printf "No "$2" in "$notepath"\n"
