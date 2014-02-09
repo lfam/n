@@ -11,7 +11,7 @@ local cur notepath suffix
 	suffix=".txt"
 
 	cur=$notepath${COMP_WORDS[COMP_CWORD]}
-	COMPREPLY=( $( compgen -f $cur | cut -d / -f5 | sed 's/ /\ /g' | \
+	COMPREPLY=( $( compgen -f $cur | sed "s!$notepath!!" | sed 's/ /\ /g' | \
 	sed "s/$suffix$//" ) ) && compopt -o nospace
 }
 complete -o filenames -F _n n
