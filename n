@@ -1,10 +1,13 @@
 #! /bin/sh
 
 # this variable contains the path to your notes
-notepath=$HOME/notes/
+notepath=~/notes/
 
 # this variable contains an optional suffix to remove from filenames
 suffix=".txt"
+
+# error message for for when you can't write to $notepath
+DIR_ERROR="You're trying to edit a file in $notepath but that directory doesn't exist or you don't have write permission. Try n --help for more information."
 
 # these variables provide usage info and documentation for n
 hint="Try 'n --help' for more information"
@@ -34,7 +37,7 @@ then
 	printf "$help"
 
 # if option -w is set, print path to argument
-elif [ "$1" = "-w" ] || [ "$2" = "-w" ] 
+elif [ "$1" = "-w" ] || [ "$2" = "-w" ]
 then
 	if [ -z "$2" ]
 	then
@@ -51,10 +54,17 @@ then
 	fi
 
 # if option -n is set, open $1 in text editor
-elif [ "$2" = "-n" ]
+elif [ "$1" = "-n" ] || [ "$2" = "-n" ]
 then
-	${EDITOR:-nano} $notepath"$1"$suffix \
-	|| printf "You're trying to edit a note in $notepath but that directory doesn't exist. Try creating it or try n --help for more information.\n"
+	if [ "$1" = "-n" ]
+	then
+		[ -w "$notepath" ] && ${EDITOR:-nano} "$notepath$2$suffix" \
+		|| printf "$DIR_ERROR\n"
+	elif [ "$2" = "-n" ]
+	then
+		[ -w "$notepath" ] && ${EDITOR:-nano} "$notepath$1$suffix" \
+		|| printf "$DIR_ERROR\n"
+	fi
 
 # running with an argument returns a list of notes whose filenames and contents
 # contain that argument
