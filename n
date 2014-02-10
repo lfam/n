@@ -16,7 +16,7 @@ You can choose a file suffix to hide by editing "'$suffix'" in $(which n)
 Usage:	n				# print list of all notes
 	n <optional note> -w		# print path to notes or specific note
 	n <search string>		# search your notes for string
-	n <note> -n			# open note in nano text editor
+	n <note> -n			# open note in text editor
 	n -h OR -help OR --help		# print this help page
 	Modes -n and -w can be placed before or after a note title.
 
@@ -48,10 +48,10 @@ then
 		[ -e "$notepath$1$suffix" ] && printf "$notepath$1$suffix\n" || printf "No "$1" in "$notepath"\n"
 	fi
 
-# if option -n is set, open $1 in nano
+# if option -n is set, open $1 in text editor
 elif [ "$2" = "-n" ]
 then
-	touch $notepath"$1"$suffix && nano $notepath"$1"$suffix ||\
+	touch $notepath"$1" && ${EDITOR:-nano} $notepath"$1" ||\
 	printf "You're trying to edit a note in $notepath but that directory doesn't exist. Try creating it or try n --help for more information.\n"
 
 # running with an argument returns a list of notes whose filenames and contents
