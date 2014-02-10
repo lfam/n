@@ -51,7 +51,7 @@ then
 # if option -n is set, open $1 in text editor
 elif [ "$2" = "-n" ]
 then
-	${EDITOR:-nano} $notepath"$1" ||\
+	${EDITOR:-nano} $notepath"$1"$suffix ||\
 	printf "You're trying to edit a note in $notepath but that directory doesn't exist. Try creating it or try n --help for more information.\n"
 
 # running with an argument returns a list of notes whose filenames and contents
