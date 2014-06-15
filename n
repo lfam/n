@@ -26,42 +26,33 @@ Usage:	n				# print list of all notes
 Report any bugs to <lfamular@gmail.com>
 "
 # running with no argument returns a list of of all notes
-if [ -z "$1" ]
-then
+if [ -z "$1" ]; then
 	ls -t $notepath | sed "s!$suffix!!" | sed '1!G;h;$!d'
 	printf "\n$hint\n"
 
 # if option -h, -help, or --help is set, print help file
-elif [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ]
-then
+elif [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ]; then
 	printf "$help"
 
 # if option -w is set, print path to argument
-elif [ "$1" = "-w" ] || [ "$2" = "-w" ]
-then
-	if [ -z "$2" ]
-	then
+elif [ "$1" = "-w" ] || [ "$2" = "-w" ]; then
+	if [ -z "$2" ]; then
 		[ -d "$notepath" ] && printf "$notepath\n"\
 		|| printf "Your notes are supposed to be in $notepath but that directory does not exist. Try creating it or try n --help for more information.\n"
-	elif [ "$1" = "-w" ]
-	then
+	elif [ "$1" = "-w" ]; then
 		[ -e "$notepath$2$suffix" ] && printf "$notepath$2$suffix\n" \
 		|| printf "No "$2" in "$notepath"\n"
-	elif [ "$2" = "-w" ]
-	then
+	elif [ "$2" = "-w" ]; then
 		[ -e "$notepath$1$suffix" ] && printf "$notepath$1$suffix\n" \
 		|| printf "No "$1" in "$notepath"\n"
 	fi
 
 # if option -n is set, open $1 in text editor
-elif [ "$1" = "-n" ] || [ "$2" = "-n" ]
-then
-	if [ "$1" = "-n" ]
-	then
+elif [ "$1" = "-n" ] || [ "$2" = "-n" ]; then
+	if [ "$1" = "-n" ]; then
 		[ -w "$notepath" ] && ${EDITOR:-nano} "$notepath$2$suffix" \
 		|| printf "$DIR_ERROR\n"
-	elif [ "$2" = "-n" ]
-	then
+	elif [ "$2" = "-n" ]; then
 		[ -w "$notepath" ] && ${EDITOR:-nano} "$notepath$1$suffix" \
 		|| printf "$DIR_ERROR\n"
 	fi
