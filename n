@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 # this variable contains the path to your notes
 notepath=~/notes/
