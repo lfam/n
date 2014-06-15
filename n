@@ -7,7 +7,7 @@ notepath=~/notes/
 suffix=".txt"
 
 # error message for for when you can't write to $notepath
-DIR_ERROR="You're trying to edit a file in $notepath but that directory doesn't exist or you don't have write permission. Try n --help for more information."
+path_error="You're trying to edit a file in $notepath but that directory doesn't exist or you don't have write permission. Try n --help for more information."
 
 # these variables provide usage info and documentation for n
 hint="Try 'n --help' for more information"
@@ -51,10 +51,10 @@ elif [ "$1" = "-w" ] || [ "$2" = "-w" ]; then
 elif [ "$1" = "-n" ] || [ "$2" = "-n" ]; then
 	if [ "$1" = "-n" ]; then
 		[ -w "$notepath" ] && ${EDITOR:-nano} "$notepath$2$suffix" \
-		|| printf "$DIR_ERROR\n"
+		|| printf "$path_error\n"
 	elif [ "$2" = "-n" ]; then
 		[ -w "$notepath" ] && ${EDITOR:-nano} "$notepath$1$suffix" \
-		|| printf "$DIR_ERROR\n"
+		|| printf "$path_error\n"
 	fi
 
 # running with an argument returns a list of notes whose filenames and contents
