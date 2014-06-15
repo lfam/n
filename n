@@ -1,19 +1,19 @@
 #!/bin/sh
 
 # this variable contains the path to your notes
-notepath=~/notes/
+note_path=~/notes/
 
 # this variable contains an optional suffix to remove from filenames
 suffix=".txt"
 
-# error message for for when you can't write to $notepath
-path_error="You're trying to edit a file in $notepath but that directory doesn't exist or you don't have write permission. Try n --help for more information."
+# error message for for when you can't write to $note_path
+path_error="You're trying to edit a file in $note_path but that directory doesn't exist or you don't have write permission. Try n --help for more information."
 
 # these variables provide usage info and documentation for n
 hint="Try 'n --help' for more information"
 help="n, for carefree note taking and reading
 
-You can change your notes directory by editing "'$notepath'" in $(which n)
+You can change your notes directory by editing "'$note_path'" in $(which n)
 You can choose a file suffix to hide by editing "'$suffix'" in $(which n)
 
 Usage:	n				# print list of all notes
@@ -27,7 +27,7 @@ Report any bugs to <lfamular@gmail.com>
 "
 # running with no argument returns a list of of all notes
 if [ -z "$1" ]; then
-	ls -t $notepath | sed "s!$suffix!!" | sed '1!G;h;$!d'
+	ls -t $note_path | sed "s!$suffix!!" | sed '1!G;h;$!d'
 	printf "\n$hint\n"
 
 # if option -h, -help, or --help is set, print help file
@@ -37,23 +37,23 @@ elif [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ]; then
 # if option -w is set, print path to argument
 elif [ "$1" = "-w" ] || [ "$2" = "-w" ]; then
 	if [ -z "$2" ]; then
-		[ -d "$notepath" ] && printf "$notepath\n"\
-		|| printf "Your notes are supposed to be in $notepath but that directory does not exist. Try creating it or try n --help for more information.\n"
+		[ -d "$note_path" ] && printf "$note_path\n"\
+		|| printf "Your notes are supposed to be in $note_path but that directory does not exist. Try creating it or try n --help for more information.\n"
 	elif [ "$1" = "-w" ]; then
-		[ -e "$notepath$2$suffix" ] && printf "$notepath$2$suffix\n" \
-		|| printf "No "$2" in "$notepath"\n"
+		[ -e "$note_path$2$suffix" ] && printf "$note_path$2$suffix\n" \
+		|| printf "No "$2" in "$note_path"\n"
 	elif [ "$2" = "-w" ]; then
-		[ -e "$notepath$1$suffix" ] && printf "$notepath$1$suffix\n" \
-		|| printf "No "$1" in "$notepath"\n"
+		[ -e "$note_path$1$suffix" ] && printf "$note_path$1$suffix\n" \
+		|| printf "No "$1" in "$note_path"\n"
 	fi
 
 # if option -n is set, open $1 in text editor
 elif [ "$1" = "-n" ] || [ "$2" = "-n" ]; then
 	if [ "$1" = "-n" ]; then
-		[ -w "$notepath" ] && ${EDITOR:-nano} "$notepath$2$suffix" \
+		[ -w "$note_path" ] && ${EDITOR:-nano} "$note_path$2$suffix" \
 		|| printf "$path_error\n"
 	elif [ "$2" = "-n" ]; then
-		[ -w "$notepath" ] && ${EDITOR:-nano} "$notepath$1$suffix" \
+		[ -w "$note_path" ] && ${EDITOR:-nano} "$note_path$1$suffix" \
 		|| printf "$path_error\n"
 	fi
 
@@ -61,9 +61,9 @@ elif [ "$1" = "-n" ] || [ "$2" = "-n" ]; then
 # contain that argument
 
 else
-	{ find -L $notepath -iname "*$1*" | sed "s!$notepath!!" | sed 's!'$suffix'$!!' ;
-	grep -E -iRso ".{0,30}$1.{0,30}" $notepath \
-	| sed "s!$notepath!!" \
+	{ find -L $note_path -iname "*$1*" | sed "s!$note_path!!" | sed 's!'$suffix'$!!' ;
+	grep -E -iRso ".{0,30}$1.{0,30}" $note_path \
+	| sed "s!$note_path!!" \
 	| sed "s/$suffix:/\ :\ /" ; } \
 	| sed '1!G;h;$!d' # this reverses the order of lines, so that new files are 
 			  # near the command line
