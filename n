@@ -50,10 +50,10 @@ elif [ "$1" = "-w" ] || [ "$2" = "-w" ]; then
 # if option -n is set, open $1 in text editor
 elif [ "$1" = "-n" ] || [ "$2" = "-n" ]; then
 	if [ "$1" = "-n" ]; then
-		[ -w "$note_path" ] && ${EDITOR:-nano} "$note_path$2$suffix" \
+		[ -w "$note_path" ] && ${EDITOR:-vi} "$note_path$2$suffix" \
 		|| printf "$path_error\n"
 	elif [ "$2" = "-n" ]; then
-		[ -w "$note_path" ] && ${EDITOR:-nano} "$note_path$1$suffix" \
+		[ -w "$note_path" ] && ${EDITOR:-vi} "$note_path$1$suffix" \
 		|| printf "$path_error\n"
 	fi
 
