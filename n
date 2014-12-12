@@ -62,6 +62,15 @@ search_notes() {
 	| sed "s/$suffix:/\ :\ /" ; } \
 	| sed '1!G;h;$!d' # this reverses the order of lines, so that new files are 
 			  # near the command line
+	if [ -f "$note_path$1$suffix" ]; then
+		printf "\nOpen matching file $1$suffix? y/*\n"
+		read ask
+		case $ask in
+			[Yy]* )	${EDITOR:-vi} "$note_path$1$suffix";
+				break;;
+			* )	break;;
+		esac
+	fi
 }
 
 main() {
@@ -76,9 +85,6 @@ main() {
 	# if option -w is set, print path to argument
 	elif [ "$1" = "-w" ] || [ "$2" = "-w" ]; then
 		which_notes $1 $2
-
-	elif [ -f "$note_path$1$suffix" ]; then
-		${EDITOR:-vi} "$note_path$1$suffix"
 
 	# if option -n is set, open $1 in text editor
 	elif [ "$1" = "-n" ] || [ "$2" = "-n" ]; then
