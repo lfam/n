@@ -34,7 +34,7 @@ ls_notes() {
 
 which_notes() {
 	if [ -z "$1" ]; then
-		[ -d "$note_path" ] && printf "$note_path\n"\
+		[ -d "$note_path" ] && printf "$note_path\n" \
 		|| printf "Your notes are supposed to be in $note_path but that directory does not exist. Try creating it or try n --help for more information.\n"
 	else
 		[ -e "$note_path$1$suffix" ] && printf "$note_path$1$suffix\n" \
@@ -100,21 +100,10 @@ main() {
 		esac
 	done
 
-	if [ ${nflag:-0} -eq 1 ]; then
-		edit_note "$str"
-	fi
-
-	if [ ${wflag:-0} -eq 1 ]; then
-		which_notes "$str"
-	fi
-
-	if [ ${hflag:-0} -eq 1 ]; then
-		printf "$help"
-	fi
-
-	if [ -z ${nflag} ] && [ -z ${hflag} ] && [ -z ${wflag} ]; then
-		echo "search"
-		search_notes $str
-	fi
+	test ${nflag:-0} -eq 1 && edit_note "$str"
+	test ${wflag:-0} -eq 1 && which_notes "$str"
+	test ${hflag:-0} -eq 1 && printf "$help"
+	test -z ${nflag} && [ -z ${hflag} ] && [ -z ${wflag} ] \
+		&& search_notes $str
 }
 main "$@"
