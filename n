@@ -33,25 +33,20 @@ ls_notes() {
 }
 
 which_notes() {
-	if [ -z "$2" ]; then
+	if [ -z "$1" ]; then
 		[ -d "$note_path" ] && printf "$note_path\n"\
 		|| printf "Your notes are supposed to be in $note_path but that directory does not exist. Try creating it or try n --help for more information.\n"
-	elif [ "$1" = "-w" ]; then
-		[ -e "$note_path$2$suffix" ] && printf "$note_path$2$suffix\n" \
-		|| printf "No "$2" in "$note_path"\n"
-	elif [ "$2" = "-w" ]; then
+	else
 		[ -e "$note_path$1$suffix" ] && printf "$note_path$1$suffix\n" \
-		|| printf "No "$1" in "$note_path"\n"
+		|| printf "No "$1$suffix" in "$note_path"\n"
 	fi
 }
 
 edit_note() {
-	if [ "$1" = "-n" ]; then
-		[ -w "$note_path" ] && ${EDITOR:-vi} "$note_path$2$suffix" \
-		|| printf "$path_error\n"
-	elif [ "$2" = "-n" ]; then
-		[ -w "$note_path" ] && ${EDITOR:-vi} "$note_path$1$suffix" \
-		|| printf "$path_error\n"
+	if [ -w "$note_path" ]; then
+		${EDITOR:-vi} "$note_path$1$suffix"
+	else
+		printf "$path_error\n"
 	fi
 }
 
@@ -73,27 +68,53 @@ search_notes() {
 	fi
 }
 
+
 main() {
-	# running with no argument returns a list of of all notes
-	if [ -z "$1" ]; then
+	if [ -z $1 ]; then
 		ls_notes
+		exit
+	fi
 
-	# if option -h, -help, or --help is set, print help file
-	elif [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ]; then
+	while [ $# -gt 0 ]; do
+		case "$1" in
+		"-w" )
+			wflag=1
+			shift
+			continue
+			;;
+		"-n" )
+			nflag=1
+			shift
+			continue
+			;;
+		--help | -help | -h )
+			hflag=1
+			shift
+			continue
+			;;
+		* )
+			str="$1"
+			shift
+			continue
+			;;
+		esac
+	done
+
+	if [ ${nflag:-0} -eq 1 ]; then
+		edit_note "$str"
+	fi
+
+	if [ ${wflag:-0} -eq 1 ]; then
+		which_notes "$str"
+	fi
+
+	if [ ${hflag:-0} -eq 1 ]; then
 		printf "$help"
+	fi
 
-	# if option -w is set, print path to argument
-	elif [ "$1" = "-w" ] || [ "$2" = "-w" ]; then
-		which_notes $1 $2
-
-	# if option -n is set, open $1 in text editor
-	elif [ "$1" = "-n" ] || [ "$2" = "-n" ]; then
-		edit_note $1 $2
-
-	# running with an argument returns a list of notes whose filenames and contents
-	# contain that argument
-	else
-		search_notes $1
+	if [ -z ${nflag} ] && [ -z ${hflag} ] && [ -z ${wflag} ]; then
+		echo "search"
+		search_notes $str
 	fi
 }
 main "$@"
