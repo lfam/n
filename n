@@ -7,21 +7,21 @@ note_path=~/notes/
 suffix=".txt"
 
 # error message for for when you can't write to $note_path
-path_error="You're trying to edit a file in $note_path but that directory doesn't exist or you don't have write permission. Try n --help for more information."
+path_error="You're trying to edit a file in $note_path but that directory doesn't exist or you don't have write permission. Try $(basename $0) --help for more information."
 
-# these variables provide usage info and documentation for n
-hint="Try 'n --help' for more information"
-help="n, for carefree note taking and reading
+# these variables provide usage info and documentation for the script.
+hint="Try '$(basename $0) --help' for more information"
+help="$(basename $0), for carefree note taking and reading
 
-You can change your notes directory by editing "'$note_path'" in $(which n)
-You can choose a file suffix to hide by editing "'$suffix'" in $(which n)
+You can change your notes directory by editing "\$note_path" in $(which $0)
+You can choose a file suffix to hide by editing "\$suffix" in $(which $0)
 
-Usage:	n				# print list of all notes
-	n <optional note> -w		# print path to notes or specific note
-	n <search string>		# if string is a note, open in editor
+Usage:	$(basename $0)				# print list of all notes
+	$(basename $0) <optional note> -w		# print path to notes or specific note
+	$(basename $0) <search string>		# if string is a note, open in editor
 					# if not, search notes for string
-	n <note> -n			# open note in text editor
-	n -h OR -help OR --help		# print this help page
+	$(basename $0) <note> -n			# open note in text editor
+	$(basename $0) -h OR -help OR --help		# print this help page
 	Modes -n and -w can be placed before or after a note title.
 
 Report any bugs to <lfamular@gmail.com>
