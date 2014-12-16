@@ -47,7 +47,8 @@ search_notes() {
 	grep -E -iRso ".{0,30}$1.{0,30}" $notes \
 	| sed "s!$notes!!" \
 	| sed "s/$suffix:/\ :\ /" ; } \
-	| sed '1!G;h;$!d' 
+	| sed '1!G;h;$!d' \
+	| nl -n ln -s' ' -w2
 	if [ -f "$notes$1$suffix" ]; then
 		printf "\nOpen matching file $1$suffix? y/*\n"
 		read ask
