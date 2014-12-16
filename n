@@ -46,7 +46,7 @@ search_notes() {
 	{ find -L $notes -iname "*$1*" | sed "s!$notes!!" | sed 's!'$suffix'$!!' ;
 	grep -E -iRso ".{0,30}$1.{0,30}" $notes \
 	| sed "s!$notes!!" \
-	| sed "s/$suffix:/\ :\ /" ; } \
+	| sed "s!$suffix:!\ :\ !" ; } \
 	| sed '1!G;h;$!d' \
 	| nl -n ln -s' ' -w2
 	if [ -f "$notes$1$suffix" ]; then
