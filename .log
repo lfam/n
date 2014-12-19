@@ -1,3 +1,7 @@
+Thu,18 Dec 2014 21:48:41 -0500
+Return exit status so that output of -w can be parsed reliably. Also, write
+errors to stderr
+
 Thu,11 Dec 2014 21:42:57 -0500
 
 If there is an argument without a command flag, check if it is a path in
