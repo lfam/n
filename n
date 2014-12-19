@@ -101,11 +101,11 @@ main() {
 		esac
 	done
 
-	# why do these tests twice?
-	test ${nflag:-0} -eq 1 && edit_note "$str"
-	test ${wflag:-0} -eq 1 && which_notes "$str"
-	test ${hflag:-0} -eq 1 && printf "$help"
-	test -z ${nflag} && [ -z ${hflag} ] && [ -z ${wflag} ] \
-		&& search_notes $str
+	# this is basically testing twice...
+	search="true"
+	test ${nflag:-0} -eq 1 && edit_note "$str" && search="false"
+	test ${wflag:-0} -eq 1 && which_notes "$str" && search="false"
+	test ${hflag:-0} -eq 1 && printf "$help" && search="false"
+	test $search = "true" && search_notes $str
 }
 main "$@"
