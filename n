@@ -26,18 +26,22 @@ Usage:	$(basename $0)				# print list of all notes
 
 Report any bugs to <lfamular@gmail.com>
 "
+err_exit() {
+	printf "$1\n" 1>&2
+	exit 1
+}
 
 edit_note() {
 	if [ -w "$notes" ]; then
 		${EDITOR:-vi} "$notes$1$suffix"
 	else
-		printf "$path_error\n"
+		err_exit "$path_error"
 	fi
 }
 
 ls_notes() {
 	ls -t $notes | sed "s!$suffix!!" | nl | sort -nr | cut -f2-
-	printf "\n$hint\n"
+	printf "\n$hint\n" 1>&2
 }
 
 search_notes() {
@@ -51,16 +55,23 @@ search_notes() {
 
 which_notes() {
 	if [ -z "$1" ]; then
-		[ -d "$notes" ] && printf "$notes\n" \
-		|| printf "Your notes are supposed to be in $notes but that directory does not exist. Try creating it or try n --help for more information.\n"
+		printf "$notes\n"
 	else
 		[ -e "$notes$1$suffix" ] && printf "$notes$1$suffix\n" \
-		|| printf "No "$1$suffix" in "$notes"\n"
+		|| err_exit "No "$1$suffix" in "$notes""
 	fi
 }
 
+
+
 main() {
-	if [ -z $1 ]; then
+	# is this test necessary? can we let user specify path on command line?
+        # is there a point to enabling that?
+	if [ ! -d $notes ]; then
+		err_exit "Your notes are supposed to be in $notes but that directory does not exist. Try creating it or try n --help for more information."
+	fi
+
+	if [ -z "$1" ]; then
 		ls_notes
 		exit
 	fi
@@ -90,6 +101,7 @@ main() {
 		esac
 	done
 
+	# why do these tests twice?
 	test ${nflag:-0} -eq 1 && edit_note "$str"
 	test ${wflag:-0} -eq 1 && which_notes "$str"
 	test ${hflag:-0} -eq 1 && printf "$help"
