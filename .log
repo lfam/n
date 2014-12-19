@@ -1,3 +1,14 @@
+Thu,18 Dec 2014 21:54:44 -0500
+How about some 'set' magic to allow multiple arguments in the positional
+parameters while preserving the ability to put options and flags out of order?
+
+for arg in $@
+	if arg is opt
+		remove it
+	else
+		continue
+parsing is done, do program
+
 Thu,18 Dec 2014 21:48:41 -0500
 Return exit status so that output of -w can be parsed reliably. Also, write
 errors to stderr
