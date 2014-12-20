@@ -46,7 +46,7 @@ ls_notes() {
 
 search_notes() {
 	{ find -L $notes -iname "*$1*" | sed "s!$notes!!" | sed 's!'$suffix'$!!' ;
-	grep -E -iso ".{0,30}$1.{0,30}" $notes/* \
+	grep -iso -E ".{0,30}$1.{0,30}" $notes/* \
 	| sed "s!$notes!!" \
 	| sed "s!$suffix:!\ :\ !" ; } \
 	| nl | sort -nr | cut -f2- \
@@ -101,11 +101,10 @@ main() {
 		esac
 	done
 
-	# why do these tests twice?
-	test ${nflag:-0} -eq 1 && edit_note "$str"
-	test ${wflag:-0} -eq 1 && which_notes "$str"
-	test ${hflag:-0} -eq 1 && printf "$help"
-	test -z ${nflag} && [ -z ${hflag} ] && [ -z ${wflag} ] \
-		&& search_notes $str
+	# this is basically testing twice...
+	test ${nflag:-0} -eq 1 && edit_note "$str" && bool="false"
+	test ${wflag:-0} -eq 1 && which_notes "$str" && bool="false"
+	test ${hflag:-0} -eq 1 && printf "$help" && bool="false"
+	test ${bool:-true} = "true" && search_notes $str
 }
 main "$@"
