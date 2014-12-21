@@ -35,12 +35,14 @@ edit_note() {
 	if [ -w "$notes" ]; then
 		${EDITOR:-vi} "$notes$1$suffix"
 	else
-		err_exit "$path_error"
+		printf "$path_error\n" 1>&2
+		ret=1
 	fi
+	return ${ret:-0}
 }
 
 ls_notes() {
-	ls -t $notes | sed "s!$suffix!!" | nl | sort -nr | cut -f2-
+	ls -rt $notes | sed "s!$suffix!!"
 	printf "\n$hint\n" 1>&2
 }
 
@@ -57,9 +59,10 @@ which_notes() {
 	if [ -z "$1" ]; then
 		printf "$notes\n"
 	else
-		[ -e "$notes$1$suffix" ] && printf "$notes$1$suffix\n" \
-		|| err_exit "No "$1$suffix" in "$notes""
+		test -e "$notes$1$suffix" || { printf "File not found: " 1>&2; ret=1; }
+		printf "$notes$1$suffix\n"
 	fi
+	return ${ret:-0}
 }
 
 
@@ -68,7 +71,7 @@ main() {
 	# is this test necessary? can we let user specify path on command line?
         # is there a point to enabling that?
 	if [ ! -d $notes ]; then
-		err_exit "Your notes are supposed to be in $notes but that directory does not exist. Try creating it or try n --help for more information."
+		err_exit "$path_error"
 	fi
 
 	if [ -z "$1" ]; then
@@ -102,9 +105,11 @@ main() {
 	done
 
 	# this is basically testing twice...
-	test ${nflag:-0} -eq 1 && edit_note "$str" && bool="false"
-	test ${wflag:-0} -eq 1 && which_notes "$str" && bool="false"
-	test ${hflag:-0} -eq 1 && printf "$help" && bool="false"
+	test ${nflag:-0} -eq 1 && { edit_note "$str"; ret=$?; bool="false"; }
+	test ${wflag:-0} -eq 1 && { which_notes "$str"; ret=$?; bool="false"; }
+	test ${hflag:-0} -eq 1 && { printf "$help"; bool="false"; }
 	test ${bool:-true} = "true" && search_notes $str
+
+	exit ${ret:-0}
 }
 main "$@"
