@@ -3,7 +3,7 @@ Use POSIX parameter expansion to strip paths and file extension suffixes from
 output instead of sed. Will this require a "strip" function to make it clean in
 pipelines?
 
-Also, how about allowing n -w to output nonexistent paths in addition to an
+DONE: Also, how about allowing n -w to output nonexistent paths in addition to an
 error message on stderr and an error exit code? This way, n -w could be used by
 other programs to create files.
 
