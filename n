@@ -42,17 +42,29 @@ edit_note() {
 }
 
 ls_notes() {
-	ls -rt $notes | sed "s!$suffix!!"
+	ls -rt $notes | strip_suffix
 	printf "\n$hint\n" 1>&2
 }
 
 search_notes() {
-	{ find -L $notes -iname "*$1*" | sed "s!$notes!!" | sed 's!'$suffix'$!!' ;
-	grep -iso -E ".{0,30}$1.{0,30}" $notes/* \
-	| sed "s!$notes/!!" \
+	{ find -L $notes -iname "*$1*" | strip_prefix | strip_suffix ;
+	grep -iso -E ".{0,30}$1.{0,30}" $notes* \
+	| strip_prefix \
 	| sed "s!$suffix:!\ :\ !" ; } \
 	| nl | sort -nr | cut -f2- \
 	| nl -n ln -s' ' -w2
+}
+
+strip_prefix() {
+	while read input; do
+		echo ${input#$notes}
+	done
+}
+
+strip_suffix() {
+	while read input; do
+		echo ${input%$suffix}
+	done
 }
 
 which_notes() {
@@ -64,8 +76,6 @@ which_notes() {
 	fi
 	return ${ret:-0}
 }
-
-
 
 main() {
 	# is this test necessary? can we let user specify path on command line?
