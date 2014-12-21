@@ -1,5 +1,5 @@
 Sat,20 Dec 2014 12:52:22 -0500
-Use POSIX parameter expansion to strip paths and file extension suffixes from
+DONE: Use POSIX parameter expansion to strip paths and file extension suffixes from
 output instead of sed. Will this require a "strip" function to make it clean in
 pipelines?
 
@@ -23,11 +23,11 @@ for arg in $@
 parsing is done, do program
 
 Thu,18 Dec 2014 21:48:41 -0500
-Return exit status so that output of -w can be parsed reliably. Also, write
+DONE: Return exit status so that output of -w can be parsed reliably. Also, write
 errors to stderr
 
 Thu,11 Dec 2014 21:42:57 -0500
 
-If there is an argument without a command flag, check if it is a path in
+ANNOYING, not doing: If there is an argument without a command flag, check if it is a path in
 note_path, and if it is, open it in $EDITOR.
 
