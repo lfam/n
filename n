@@ -6,8 +6,8 @@ notes=~/notes/
 # this variable contains an optional suffix to remove from filenames
 suffix=".txt"
 
-# error message for for when you can't write to $notes
-path_error="You're trying to edit a file in $notes but that directory doesn't exist or you don't have write permission. Try $(basename $0) --help for more information."
+# error message for for when $notes doesn't exist or we don't have permission
+path_error="ERROR: $notes does not exist or you don't have permission. Try $(basename $0) --help for more information."
 
 # these variables provide usage info and documentation for the script.
 hint="Try '$(basename $0) --help' for more information"
@@ -26,16 +26,12 @@ Usage:	$(basename $0)				# print list of all notes
 
 Report any bugs to <lfamular@gmail.com>
 "
-err_exit() {
-	printf "$1\n" 1>&2
-	exit 1
-}
 
 edit_note() {
 	if [ -w "$notes" ]; then
 		${EDITOR:-vi} "$notes$1$suffix"
 	else
-		printf "$path_error\n" 1>&2
+		printf "$path_error\n" | fold -w80 -s 1>&2
 		ret=1
 	fi
 	return ${ret:-0}
@@ -43,7 +39,7 @@ edit_note() {
 
 ls_notes() {
 	ls -rt $notes | strip_suffix
-	printf "\n$hint\n" 1>&2
+	printf "\n$hint\n" | fold -w80 -s 1>&2
 }
 
 search_notes() {
@@ -81,7 +77,8 @@ main() {
 	# is this test necessary? can we let user specify path on command line?
         # is there a point to enabling that?
 	if [ ! -d $notes ]; then
-		err_exit "$path_error"
+		printf "$path_error\n" | fold -w80 -s 1>&2
+		exit 1
 	fi
 
 	if [ -z "$1" ]; then
