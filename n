@@ -6,11 +6,7 @@ notes=~/notes/
 # this variable contains an optional suffix to remove from filenames
 suffix=".txt"
 
-# error message for for when $notes doesn't exist or we don't have permission
-path_error="ERROR: $notes does not exist or you don't have permission. Try $(basename $0) --help for more information."
-
-# these variables provide usage info and documentation for the script.
-hint="Try '$(basename $0) --help' for more information"
+# help text
 help="$(basename $0), for carefree note taking and reading
 
 You can change your notes directory by editing "\$notes" in $(which $0)
@@ -28,18 +24,22 @@ Report any bugs to <lfamular@gmail.com>
 "
 
 edit_note() {
-	if [ -w "$notes" ]; then
-		${EDITOR:-vi} "$notes$1$suffix"
-	else
-		printf "$path_error\n" | fold -w80 -s 1>&2
-		ret=1
+	if [ ! -d "$notes" ]; then
+		printf "$notes: No such file or directory\n" 1>&2
+		return 1
+	elif [ ! -w "$notes" ]; then
+		printf "$notes: Permission denied\n" 1>&2
+		return 1
+	elif [ -e "$notes$1$suffix" ] && [ ! -w "$notes$1$suffix" ]; then
+		printf "$notes$1$suffix: Permission denied\n" 1>&2
+		return 1
 	fi
+	${EDITOR:-vi} "$notes$1$suffix"
 	return ${ret:-0}
 }
 
 ls_notes() {
 	ls -rt $notes | strip_suffix
-	printf "\n$hint\n" | fold -w80 -s 1>&2
 }
 
 search_notes() {
@@ -74,16 +74,8 @@ which_notes() {
 }
 
 main() {
-	# is this test necessary? can we let user specify path on command line?
-        # is there a point to enabling that?
-	if [ ! -d $notes ]; then
-		printf "$path_error\n" | fold -w80 -s 1>&2
-		exit 1
-	fi
-
 	if [ -z "$1" ]; then
 		ls_notes
-		exit
 	fi
 
 	while [ $# -gt 0 ]; do
@@ -115,7 +107,7 @@ main() {
 	test ${nflag:-0} -eq 1 && { edit_note "$str"; ret=$?; bool="false"; }
 	test ${wflag:-0} -eq 1 && { which_notes "$str"; ret=$?; bool="false"; }
 	test ${hflag:-0} -eq 1 && { printf "$help"; bool="false"; }
-	test ${bool:-true} = "true" && search_notes $str
+	test ${bool:-true} = "true" && test -n "$str" && search_notes $str
 
 	exit ${ret:-0}
 }
