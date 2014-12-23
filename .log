@@ -1,5 +1,5 @@
 Sat,20 Dec 2014 22:51:35 -0500
-Should -w really do something different the two error cases of "bad $notes" vs
+NO: Should -w really do something different the two error cases of "bad $notes" vs
 "this one note doesn't exist"?
 
 Sat,20 Dec 2014 12:52:22 -0500
