@@ -24,18 +24,8 @@ Report any bugs to <lfamular@gmail.com>
 "
 
 edit_note() {
-	if [ ! -d "$notes" ]; then
-		printf "$notes: No such file or directory\n" 1>&2
-		return 1
-	elif [ ! -w "$notes" ]; then
-		printf "$notes: Permission denied\n" 1>&2
-		return 1
-	elif [ -e "$notes$1$suffix" ] && [ ! -w "$notes$1$suffix" ]; then
-		printf "$notes$1$suffix: Permission denied\n" 1>&2
-		return 1
-	fi
 	${EDITOR:-vi} "$notes$1$suffix"
-	return ${ret:-0}
+	return $?
 }
 
 ls_notes() {
@@ -74,9 +64,7 @@ which_notes() {
 }
 
 main() {
-	if [ -z "$1" ]; then
-		ls_notes
-	fi
+	[ -z "$1" ] && ls_notes
 
 	while [ $# -gt 0 ]; do
 		case "$1" in
@@ -103,10 +91,10 @@ main() {
 		esac
 	done
 
-	# this is basically testing twice...
 	test ${nflag:-0} -eq 1 && { edit_note "$str"; ret=$?; bool="false"; }
 	test ${wflag:-0} -eq 1 && { which_notes "$str"; ret=$?; bool="false"; }
 	test ${hflag:-0} -eq 1 && { printf "$help"; bool="false"; }
+	# this is basically testing twice...
 	test ${bool:-true} = "true" && test -n "$str" && search_notes $str
 
 	exit ${ret:-0}
