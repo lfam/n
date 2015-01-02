@@ -1,17 +1,23 @@
 #!/bin/sh
 
+# set the directory to target based on $0, from an environment variable
 name="$(basename $0)"
-eval env_dir=\$${name}DIR
-dir="${inter:-$HOME/notes/}"
+eval dir=\$${name}DIR
+dir="${dir:-$HOME/notes/}"
 
 # this variable contains an optional suffix to remove from filenames
-suffix=".txt"
+eval suffix=\$${name}SUFFIX
+suffix="${suffix:-}"
 
 # help text
-help="$name, for carefree note taking and reading
+usage() {
+cat <<EOF
+$name, for carefree note taking and reading
 
-You can change your notes directory by editing "\$dir" in $(which $0)
-You can choose a file suffix to hide by editing "\$suffix" in $(which $0)
+You can set your notes directory by exporting the environment variable 
+named \$${name}DIR.
+You can set a filename suffix to hide by exporting the environment variable
+named \$${name}SUFFIX.
 
 Usage:	$name				# print list of all notes
 	$name <optional note> -w		# print path to notes or specific note
@@ -22,7 +28,8 @@ Usage:	$name				# print list of all notes
 	Modes -n and -w can be placed before or after a note title.
 
 Report any bugs to <lfamular@gmail.com>
-"
+EOF
+}
 
 edit_note() {
 	${EDITOR:-vi} "$dir$1$suffix"
@@ -94,7 +101,7 @@ main() {
 
 	test ${nflag:-0} -eq 1 && { edit_note "$str"; ret=$?; bool="false"; }
 	test ${wflag:-0} -eq 1 && { which_notes "$str"; ret=$?; bool="false"; }
-	test ${hflag:-0} -eq 1 && { printf "$help"; bool="false"; }
+	test ${hflag:-0} -eq 1 && { usage; bool="false"; }
 	# this is basically testing twice...
 	test ${bool:-true} = "true" && test -n "$str" && search_notes $str
 
