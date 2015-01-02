@@ -1,17 +1,46 @@
 #!/bin/sh
 
 # set the directory to target based on $0, from an environment variable
-name="$(basename $0)"
-eval dir=\$${name}DIR
-dir="${dir:-$HOME/notes/}"
+name=$(basename "$0")
+eval dir=\$"${name}"DIR
+dir="${dir:-$HOME/nites/}"
 
 # this variable contains an optional suffix to remove from filenames
-eval suffix=\$${name}SUFFIX
+eval suffix=\$"${name}"SUFFIX
 suffix="${suffix:-}"
 
-# help text
+edit_note() {
+	${EDITOR:-vi} "$dir$1$suffix"
+	return $?
+}
+
+ls_notes() {
+	ls -rt "$dir" | strip_suffix
+}
+
+search_notes() {
+	{ find -L "$dir" -iname "*$1*" | strip_prefix | strip_suffix ;
+	grep -iso -E ".{0,30}$1.{0,30}" "$dir"* \
+	| strip_prefix \
+	| sed "s!$suffix:!\ :\ !" ; } \
+	| nl | sort -nr | cut -f2- \
+	| nl -n ln -s' ' -w2
+}
+
+strip_prefix() {
+	while read input; do
+		echo "${input#$dir}"
+	done
+}
+
+strip_suffix() {
+	while read input; do
+		echo "${input%$suffix}"
+	done
+}
+
 usage() {
-cat <<EOF
+	cat <<EOF
 $name, for carefree note taking and reading
 
 You can set your notes directory by exporting the environment variable 
@@ -31,42 +60,12 @@ Report any bugs to <lfamular@gmail.com>
 EOF
 }
 
-edit_note() {
-	${EDITOR:-vi} "$dir$1$suffix"
-	return $?
-}
-
-ls_notes() {
-	ls -rt $dir | strip_suffix
-}
-
-search_notes() {
-	{ find -L $dir -iname "*$1*" | strip_prefix | strip_suffix ;
-	grep -iso -E ".{0,30}$1.{0,30}" $dir* \
-	| strip_prefix \
-	| sed "s!$suffix:!\ :\ !" ; } \
-	| nl | sort -nr | cut -f2- \
-	| nl -n ln -s' ' -w2
-}
-
-strip_prefix() {
-	while read input; do
-		echo ${input#$dir}
-	done
-}
-
-strip_suffix() {
-	while read input; do
-		echo ${input%$suffix}
-	done
-}
-
 which_notes() {
 	if [ -z "$1" ]; then
-		printf "$dir\n"
+		printf "%s\n" "$dir"
 	else
 		test -e "$dir$1$suffix" || { printf "File not found: " 1>&2; ret=1; }
-		printf "$dir$1$suffix\n"
+		printf "%s%s%s\n" "$dir" "$1" "$suffix"
 	fi
 	return ${ret:-0}
 }
@@ -103,7 +102,7 @@ main() {
 	test ${wflag:-0} -eq 1 && { which_notes "$str"; ret=$?; bool="false"; }
 	test ${hflag:-0} -eq 1 && { usage; bool="false"; }
 	# this is basically testing twice...
-	test ${bool:-true} = "true" && test -n "$str" && search_notes $str
+	test ${bool:-true} = "true" && test -n "$str" && search_notes "$str"
 
 	exit ${ret:-0}
 }
