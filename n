@@ -1,13 +1,14 @@
 #!/bin/sh
 
-# set the directory to target based on $0, from an environment variable
 name=$(basename "$0")
+
+# set the directory to target based on $0, from an environment variable
 eval dir=\$"${name}"DIR
-dir="${dir:-$HOME/nites/}"
+dir="${dir:-$HOME/notes/}"
 
 # this variable contains an optional suffix to remove from filenames
 eval suffix=\$"${name}"SUFFIX
-suffix="${suffix:-}"
+suffix="${suffix:-.txt}"
 
 edit_note() {
 	${EDITOR:-vi} "$dir$1$suffix"
