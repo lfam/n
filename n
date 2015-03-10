@@ -8,7 +8,7 @@ dir="${dir:-$HOME/notes/}"
 
 # this variable contains an optional suffix to remove from filenames
 eval suffix=\$"${name}"SUFFIX
-suffix="${suffix:-.txt}"
+suffix="${suffix:-}"
 
 edit_note() {
 	${EDITOR:-vi} "$dir$1$suffix"
