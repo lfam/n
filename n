@@ -72,6 +72,7 @@ which_notes() {
 }
 
 main() {
+	ret=0;
 	[ -z "$1" ] && ls_notes
 
 	while [ $# -gt 0 ]; do
@@ -99,8 +100,8 @@ main() {
 		esac
 	done
 
-	test ${nflag:-0} -eq 1 && { edit_note "$str"; ret=$?; bool="false"; }
-	test ${wflag:-0} -eq 1 && { which_notes "$str"; ret=$?; bool="false"; }
+	test ${nflag:-0} -eq 1 && { edit_note "$str"; ret=$((ret+$?)); bool="false"; }
+	test ${wflag:-0} -eq 1 && { which_notes "$str"; ret=$((ret+$?)); bool="false"; }
 	test ${hflag:-0} -eq 1 && { usage; bool="false"; }
 	# this is basically testing twice...
 	test ${bool:-true} = "true" && test -n "$str" && search_notes "$str"
