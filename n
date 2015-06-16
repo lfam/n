@@ -57,7 +57,7 @@ Usage:	$name				# print list of all notes
 	$name -h OR -help OR --help		# print this help page
 	Modes -n and -w can be placed before or after a note title.
 
-Report any bugs to <lfamular@gmail.com>
+Report any bugs to <leo@famulari.name>
 EOF
 }
 
